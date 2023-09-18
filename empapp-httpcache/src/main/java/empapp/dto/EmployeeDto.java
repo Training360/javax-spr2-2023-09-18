@@ -11,5 +11,7 @@ public class EmployeeDto {
 
     private String name;
 
+    private long version;
+
     private List<AddressDto> addresses;
 }
