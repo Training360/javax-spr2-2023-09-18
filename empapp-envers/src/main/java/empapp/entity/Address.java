@@ -4,12 +4,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
 
 import static lombok.AccessLevel.PRIVATE;
 
 @Entity
 @Data
 @NoArgsConstructor(access = PRIVATE)
+@Audited
 public class Address {
 
     @Id

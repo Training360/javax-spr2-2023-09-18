@@ -4,6 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import static lombok.AccessLevel.PRIVATE;
 @Entity
 @Data
 @NoArgsConstructor(access = PRIVATE)
+@Audited
 public class Employee {
 
     @Id
