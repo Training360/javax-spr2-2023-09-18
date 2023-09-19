@@ -27,7 +27,7 @@ public class EmpappWebsocketClientApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		var client = new WebSocketStompClient(new SockJsClient(List.of(new WebSocketTransport(new StandardWebSocketClient()))));
 		client.setMessageConverter(new MappingJackson2MessageConverter());
-		client.connectAsync("ws://localhost:8080/websocket-endpoint", new StompSessionHandlerAdapter() {
+		var result = client.connectAsync("ws://localhost:8080/websocket-endpoint", new StompSessionHandlerAdapter() {
 			@Override
 			public void afterConnected(StompSession session, StompHeaders connectedHeaders) {
 				session.subscribe("/topic/employees", this);
@@ -58,6 +58,19 @@ public class EmpappWebsocketClientApplication implements CommandLineRunner {
 				log.error("transport", exception);
 			}
 		});
+
+		result.whenComplete((session, t) -> {
+			try {
+				Thread.sleep(5000);
+			}catch (InterruptedException ie) {
+				log.error("interrupt", ie);
+			}
+			log.info("Sending message");
+			session.send("/app/messages", new MessageRequest("heelo, i'm here"));
+			}
+		);
+
+		log.info("start scanner");
 		var scanner = new Scanner(System.in);
 		scanner.nextLine();
 	}
