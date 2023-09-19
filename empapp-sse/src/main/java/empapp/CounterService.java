@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 @Service
@@ -24,7 +25,12 @@ public class CounterService {
 
     @SneakyThrows
     private void sendNumber(SseEmitter emitter, int i) {
-        emitter.send("Hello %d".formatted(i));
+        var builder = SseEmitter.event()
+                        .name("message")
+                                .id(UUID.randomUUID().toString())
+                                        .comment("Beautiful message")
+                                                .data(new Message("Hello %d".formatted(i)));
+        emitter.send(builder);
     }
 
     @SneakyThrows
