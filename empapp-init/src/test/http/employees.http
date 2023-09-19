@@ -5,7 +5,12 @@ Accept: application/json
 
 ### Find employee by id
 
-GET http://localhost:8080/api/employees/5
+GET http://localhost:8080/api/employees/1
+Accept: application/json
+
+### Find employee by id based on etag
+GET http://localhost:8080/api/employees/1
+If-None-Match: "3"
 Accept: application/json
 
 
@@ -34,13 +39,31 @@ Content-Type: application/json
 
 ### Update
 
-PUT http://localhost:8080/api/employees/9
+PUT http://localhost:8080/api/employees/1
 Content-Type: application/json
 
 {
-  "name": "Jane Doe 2"
+  "name": "Jane Doe"
 }
 
 ### Delete
 
-DELETE http://localhost:8080/api/employees/9
+DELETE http://localhost:8080/api/employees/1
+
+### Actuators
+
+GET http://localhost:8080/actuator
+
+### Metrics
+
+GET http://localhost:8080/actuator/metrics
+
+### Cache
+GET http://localhost:8080/actuator/metrics/cache.gets?tag=name:employee_list
+
+### Cache
+GET http://localhost:8080/actuator/caches
+
+
+### Cache - employee
+GET http://localhost:8080/actuator/caches/employee_list
