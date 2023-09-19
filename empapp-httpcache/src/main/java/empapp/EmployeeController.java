@@ -25,8 +25,13 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping
-    public List<EmployeeDto> employees() {
-        return employeeService.listEmployees();
+    public ResponseEntity<List<EmployeeDto>> employees() {
+        var employees = employeeService.listEmployees();
+        return
+                ResponseEntity
+                        .ok()
+                        .cacheControl(CacheControl.maxAge(Duration.of(5, ChronoUnit.MINUTES)))
+                        .body(employees);
     }
 
     @GetMapping("/{id}")
