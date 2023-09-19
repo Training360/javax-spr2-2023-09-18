@@ -5,6 +5,7 @@ import empapp.dto.EmployeeDto;
 import empapp.dto.UpdateEmployeeCommand;
 import empapp.entity.Employee;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -17,9 +18,14 @@ public class EmployeeService {
 
     private EmployeeMapper employeeMapper;
 
+    private ApplicationEventPublisher applicationEventPublisher;
+
     public EmployeeDto createEmployee(CreateEmployeeCommand command) {
         Employee employee = employeeMapper.toEmployee(command);
         employeeRepository.save(employee);
+
+        applicationEventPublisher.publishEvent(new MessageResponse("Employee has been created: %s".formatted(command.getName())));
+
         return employeeMapper.toEmployeeDto(employee);
     }
 
