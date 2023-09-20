@@ -4,12 +4,16 @@ import empapp.dto.CreateEmployeeCommand;
 import empapp.dto.EmployeeDto;
 import empapp.dto.UpdateEmployeeCommand;
 import lombok.AllArgsConstructor;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.List;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/employees")
@@ -19,8 +23,18 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping
-    public List<EmployeeDto> employees() {
-        return employeeService.listEmployees();
+    public CollectionModel<EmployeeDto> employees() {
+        var employees = employeeService.listEmployees();
+
+        for (var employee: employees) {
+            employee.add(linkTo(methodOn(EmployeeController.class).findEmployeeById(employee.getId()))
+                    .withSelfRel());
+        }
+
+        var model = CollectionModel.of(employees);
+        model.add(linkTo(methodOn(EmployeeController.class).employees()).withSelfRel());
+
+        return model;
     }
 
     @GetMapping("/{id}")
