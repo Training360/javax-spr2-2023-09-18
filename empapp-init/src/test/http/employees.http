@@ -59,7 +59,11 @@ GET http://localhost:8080/actuator
 GET http://localhost:8080/actuator/metrics
 
 ### Cache
-GET http://localhost:8080/actuator/metrics/cache.gets?tag=name:employee_list
+GET http://localhost:8080/actuator/metrics/cache.gets
+
+
+### Cache
+GET http://localhost:8080/actuator/metrics/cache.gets?tag=result:hit
 
 ### Cache
 GET http://localhost:8080/actuator/caches
@@ -67,3 +71,20 @@ GET http://localhost:8080/actuator/caches
 
 ### Cache - employee
 GET http://localhost:8080/actuator/caches/employee_list
+
+### Hello
+GET http://localhost:8080/api/hello
+
+### SSE
+GET http://localhost:8080/api/counter
+
+### WS
+POST http://localhost:8080/services/employees
+Content-Type: text/xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+  <soap:Body>
+    <employees xmlns="http://training360.com/services/empapp"/>
+  </soap:Body>
+</soap:Envelope>
