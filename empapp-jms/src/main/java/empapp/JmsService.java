@@ -18,18 +18,23 @@ public class JmsService {
     private JmsTemplate jmsTemplate;
 
     public void send(Employee employee) {
-        jmsTemplate.send("employeesQueue",
-                s -> s.createTextMessage("Employee has been created: %s".formatted(employee.getName())));
+//        jmsTemplate.send("employeesQueue",
+//                s -> s.createTextMessage("Employee has been created: %s".formatted(employee.getName())));
+
+        jmsTemplate.convertAndSend("employeesQueue",
+                new EmployeesMessage("Employee has been created: %s".formatted(employee.getName())));
     }
 
     @JmsListener(destination = "employeesQueue")
     @SneakyThrows
-    public void receive(Message message) {
-        if (message instanceof TextMessage textMessage) {
-            log.info("JMS message has come: {}", textMessage.getText());
-        }
-        else {
-            log.error("Unknown message: {}", message.getClass().getName());
-        }
+    public void receive(EmployeesMessage message) {
+//        if (message instanceof TextMessage textMessage) {
+//            log.info("JMS message has come: {}", textMessage.getText());
+//        }
+//        else {
+//            log.error("Unknown message: {}", message.getClass().getName());
+//        }
+
+        log.info("Message has come: {}", message.getText());
     }
 }
