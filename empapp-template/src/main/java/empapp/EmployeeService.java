@@ -17,9 +17,14 @@ public class EmployeeService {
 
     private EmployeeMapper employeeMapper;
 
+    private EmailService emailService;
+
     public EmployeeDto createEmployee(CreateEmployeeCommand command) {
         Employee employee = employeeMapper.toEmployee(command);
         employeeRepository.save(employee);
+
+        emailService.send(employee);
+
         return employeeMapper.toEmployeeDto(employee);
     }
 
